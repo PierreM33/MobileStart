@@ -2,20 +2,24 @@ import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, TouchableHighlight, TouchableOpacity, View} from 'react-native';
 import {translate} from "../../utilities/translation";
 
-const AppButton = ({ translateActive = true , type, title, containerStyle = {}, textStyle = {}, onPress, disabled = loading, loading = false }) => {
+const AppButton = ({ translateActive = true , type, title, containerStyle = {}, onPress, disabled = false }) => {
 
     const getButtonStyle = (type) => {
         switch (type) {
+            case 0:
+                return { backgroundColor : "grey" }
             case 1:
                 return { backgroundColor : "white" }
             case 2:
                 return { backgroundColor : "black" }
             default:
-                return { backgroundColor : "white" }
+                return { backgroundColor : "black" }
         }
     }
     const getColorText = (type) => {
         switch (type) {
+            case 0:
+                return { color : "white" }
             case 1:
                 return { color : "black" }
             case 2:
@@ -26,10 +30,10 @@ const AppButton = ({ translateActive = true , type, title, containerStyle = {}, 
     }
 
     return (
-        <TouchableOpacity onPress={onPress} style={{ ...styles.container, ...getButtonStyle(type), ...containerStyle}}>
+        <TouchableOpacity onPress={onPress} style={{ ...styles.container, ...getButtonStyle(disabled ? 0 : type), ...containerStyle}} disabled={disabled}>
             <Text style={{
                 ...styles.text,
-                ...getColorText(type),
+                ...getColorText( disabled ? 0 : type),
             }}>
                 {translateActive ? translate(title) : title}
             </Text>

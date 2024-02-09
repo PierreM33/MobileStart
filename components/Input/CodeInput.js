@@ -4,11 +4,23 @@ import PropTypes from "prop-types";
 import NameAppInput from "./NameAppInput";
 
 
-const CodeInput = ({ code, onCodeChange, onSubmit = null, loading }) => {
-    const [decomposedCode, setDecomposedCode] = useState([null, null, null, null, null, null]);
+const CodeInput = ({ code, onCodeChange, onSubmit, loading }) => {
+
     const [smsCode, setSmsCode] = useState(null);
+    const [thisCode, setThisCode] = useState(Array(6).fill(''));
+    const [inputs, setInputs] = useState([]);
 
     const refs = useRef([])
+    const timeoutRef = useRef(null);
+
+    useEffect(() => {
+        return () => {
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+            }
+        };
+    }, []);
+
 
     useEffect(() => {
         if (smsCode && smsCode.length === 6) {
@@ -19,44 +31,25 @@ const CodeInput = ({ code, onCodeChange, onSubmit = null, loading }) => {
             codeUpdate[3] = smsCode[3]
             codeUpdate[4] = smsCode[4]
             codeUpdate[5] = smsCode[5]
-            setDecomposedCode(codeUpdate)
+            setThisCode(codeUpdate)
             const codeJoin = codeUpdate.join('')
-            onCodeChange(codeJoin)
             if (onSubmit) {
                 onSubmit(codeJoin)
             }
-
         }
     }, [smsCode])
 
-    useEffect(() => {
-        if (code) {
-            const arr = []
-            for (let i = 0; i < 6; i++) {
-                if (code[i]) {
-                    arr.push(code[i])
-                }
-                else {
-                    arr.push(null)
-                }
-            }
-            setDecomposedCode(arr)
-        }
-    }, [code])
-
     const onchange = (value, index) => {
-        const codeUpdate = [...decomposedCode];
+        const codeUpdate = [...thisCode];
         setSmsCode(value)
         if (value.length <= 1) {
             codeUpdate[index] = value;
-            setDecomposedCode(codeUpdate);
+            setThisCode(codeUpdate);
             const codeJoin = codeUpdate.join('')
-            onCodeChange(codeJoin);
 
             if (codeJoin && codeJoin.length === 6 && onSubmit) {
                 onSubmit(codeJoin)
-            }
-            else if (value) {
+            } else if (value) {
                 const nextEmptyIndex = findNextEmptyIndex(codeUpdate, index + 1);
                 if (refs.current && refs.current[nextEmptyIndex]) {
                     refs.current[nextEmptyIndex].focus();
@@ -65,13 +58,39 @@ const CodeInput = ({ code, onCodeChange, onSubmit = null, loading }) => {
         }
     }
 
-    const onDelete = ( nativeEvent, index ) => {
+
+    const onDelete = (nativeEvent, index) => {
         if (nativeEvent.key === 'Backspace') {
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+            }
+
             if (index - 1 >= 0 && refs.current && refs.current[index - 1]) {
                 refs.current[index - 1].focus();
+
+                const currentIndex = index - 1;
+                timeoutRef.current = setTimeout(() => {
+                    checkPosition(currentIndex);
+                }, 500);
+            }
+        }
+    };
+
+    const checkPosition = (index) => {
+
+        if (refs.current[index] !== '') { //CASE VIDE
+            const currentInput = refs.current[index]; //VALUE CASE ACTUELLE
+            if (currentInput === '') {
+                refs.current[index].focus();
+            } else {
+                if (refs.current && refs.current[index + 1]) {
+                    refs.current[index + 1].focus();
+                }
             }
         }
     }
+
+
 
     const findNextEmptyIndex = (code, startIndex) => {
         if (startIndex >= code.length) {
@@ -83,29 +102,49 @@ const CodeInput = ({ code, onCodeChange, onSubmit = null, loading }) => {
         return findNextEmptyIndex(code, startIndex + 1);
     };
 
-    return (
-        <View style={{...styles.container}}>
-            {decomposedCode.map((value, index) => {
-                return (
+
+    const getLength = (i) => {
+        if (i === 0 && smsCode && smsCode.length === 6) {
+            return 6;
+        } else {
+            return 1;
+        }
+    }
+
+    useEffect(() => {
+        if (thisCode) {
+            const array = []
+            for (let i = 0; i < 6; i++) {
+                array.push(
                     <NameAppInput
-                        disabled={loading}
-                        key={index}
-                        value={value}
+                        disabled={false}
+                        key={i}
+                        value={thisCode[i]}
                         style={{flex: 1, marginHorizontal: 8}}
                         inputProps={{
-                            ref: (ref) => refs.current[index] = ref,
+                            ref: (ref) => refs.current[i] = ref,
                             style: {
                                 marginLeft: 0,
-                                textAlign: 'center'
+                                textAlign: 'center',
                             },
+                            autoFocus: i === 0,
                             keyboardType: 'numeric',
-                            maxLength: index === 0 ? 6 : 1,
-                            onKeyPress: ({ nativeEvent }) => onDelete(nativeEvent, index)
+                            maxLength: getLength(i),
+                            onKeyPress: ({ nativeEvent }) => onDelete(nativeEvent, i)
                         }}
-                        onTextChange={(value) => onchange(value, index)}
+                        onTextChange={(value) => onchange(value, i)}
+                        loading={loading}
                     />
-                )
-            })}
+                );
+            }
+            setInputs(array)
+        }
+    }, [thisCode])
+
+    return (
+        <View style={{...styles.container}}>
+
+            {inputs}
         </View>
     )
 };

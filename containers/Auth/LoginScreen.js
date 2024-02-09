@@ -9,14 +9,18 @@ import BackButton from "../../components/Buttons/BackButton";
 import AppInput from "../../components/Buttons/AppInput";
 import AppButton from "../../components/Buttons/AppButton";
 import AxiosInstance from "../../api/AxiosInstance";
+import {login} from "../../api/Login";
+import {setAllAuthData} from "../../redux/actions/authActions";
 
 
 
-const AuthScreen = ({ navigation, dispatch }) => {
+const LoginScreen = ({ navigation, dispatch }) => {
 
     const [error, setError] = useState(false)
     const [email, setEmail] = useState("pierre@yami.fr")
     const [password, setPassword] = useState("pierre")
+    const [loading, setLoading] = useState(false)
+    const [messageError, setMessageError] = useState(null)
 
     const onPressBack = () => {
         navigation.goBack()
@@ -27,13 +31,24 @@ const AuthScreen = ({ navigation, dispatch }) => {
             setError(true)
         } else {
             setError(false)
-            const user = {email: email, password: password};
-            const token = 'HGDSHJKSHDJKSD';
 
-            // Dispatch des actions pour mettre à jour le Redux store
-            dispatch({type: 'SET_USER', data: user});
-            dispatch({type: 'SET_TOKEN', data: token});
-            dispatch({type: 'SET_REFRESH_TOKEN', data: token});
+            const data = {
+                username: email,
+                password: password
+            }
+            // const resultLogin = await login(setLoading, setMessageError, data, setError) //TEMPORAIREMENT COMMENTE CAR PAS D'API ACTIF
+            const resultLogin = true
+            if (resultLogin) {
+                // if (resultLogin.user && resultLogin.token && resultLogin.refresh_token) {
+                    // REDIRECTION
+
+                const user = {email: email, password: password, token: 'HGDSHJKSH'};
+                dispatch({type: 'SET_USER', data: user});
+                dispatch({type: 'SET_TOKEN', data: user.token});
+                dispatch({type: 'SET_REFRESH_TOKEN', data: user.token});
+                // }
+
+            }
         }
     }
 
@@ -83,6 +98,6 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(AuthScreen);
+export default connect(null, mapDispatchToProps)(LoginScreen);
 
 

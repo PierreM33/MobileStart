@@ -2,8 +2,9 @@ import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NavigationContainer} from '@react-navigation/native';
 import WelcomeScreen from "../containers/Welcome/WelcomeScreen";
-import TutorialScreen from "../containers/Welcome/TutorialScreen";
-import AuthScreen from "../containers/Auth/AuthScreen";
+import DiscoverScreen from "../containers/Welcome/DiscoverScreen";
+import AuthScreen from "../containers/Auth/LoginScreen";
+import CodeScreen from "../containers/Auth/CodeScreen";
 
 
 const Stack = createNativeStackNavigator();
@@ -36,7 +37,7 @@ export default function AuthNavigation({ initialRoute, nav }) {
                 />
                 <Stack.Screen
                     name="Tutorial"
-                    component={TutorialScreen}
+                    component={DiscoverScreen}
                     options={{
                         headerShown: false
                     }}
