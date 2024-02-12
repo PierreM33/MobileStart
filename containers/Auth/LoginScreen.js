@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
     View,
-    KeyboardAvoidingView,Platform
+    KeyboardAvoidingView, Platform, Text
 } from 'react-native';
 
 import {connect} from "react-redux";
@@ -11,16 +11,25 @@ import AppButton from "../../components/Buttons/AppButton";
 import AxiosInstance from "../../api/AxiosInstance";
 import {login} from "../../api/Login";
 import {setAllAuthData} from "../../redux/actions/authActions";
+import ContainerOAuth from "../../components/Authentication/ContainerOAuth";
+import {loginWithApple, loginWithFacebook, loginWithGoogle} from "../../utilities/loginGAF";
 
 
 
 const LoginScreen = ({ navigation, dispatch }) => {
 
     const [error, setError] = useState(false)
-    const [email, setEmail] = useState("pierre@yami.fr")
-    const [password, setPassword] = useState("pierre")
+    const [email, setEmail] = useState("test")
+    const [password, setPassword] = useState("test")
     const [loading, setLoading] = useState(false)
     const [messageError, setMessageError] = useState(null)
+
+    useEffect( () => {
+        setTimeout( () => {
+            setLoading(false)
+            setError(false)
+        }, 2000)
+    }, [error])
 
     const onPressBack = () => {
         navigation.goBack()
@@ -31,25 +40,40 @@ const LoginScreen = ({ navigation, dispatch }) => {
             setError(true)
         } else {
             setError(false)
-
+            setLoading(true)
             const data = {
                 username: email,
                 password: password
             }
             // const resultLogin = await login(setLoading, setMessageError, data, setError) //TEMPORAIREMENT COMMENTE CAR PAS D'API ACTIF
-            const resultLogin = true
-            if (resultLogin) {
+
+            if (data.password === "test" && data.username === "test") {
                 // if (resultLogin.user && resultLogin.token && resultLogin.refresh_token) {
                     // REDIRECTION
-
-                const user = {email: email, password: password, token: 'HGDSHJKSH'};
-                dispatch({type: 'SET_USER', data: user});
-                dispatch({type: 'SET_TOKEN', data: user.token});
-                dispatch({type: 'SET_REFRESH_TOKEN', data: user.token});
                 // }
+                setTimeout( () => {
+                    setLoading(false)
+                }, 2000)
+                setTimeout( () => {
+                    const user = {email: email, password: password, token: 'HGDSHJKSH'};
+                    dispatch({type: 'SET_USER', data: user});
+                    dispatch({type: 'SET_TOKEN', data: user.token});
+                    dispatch({type: 'SET_REFRESH_TOKEN', data: user.token});
+                }, 1000)
 
+
+
+            } else {
+                setLoading(false)
+                setError(true)
+                setMessageError("Le mot de passe ou l'adresse email n'est pas valide")
             }
         }
+
+    }
+
+    const disabled = () => {
+        return email === "" || password === "" || loading || error || password.length < 4
     }
 
     return (
@@ -83,6 +107,16 @@ const LoginScreen = ({ navigation, dispatch }) => {
                         type={2}
                         onPress={onPressLogin}
                         containerStyle={{marginTop: 20}}
+                        disabled={disabled()}
+                        loading={loading}
+                    />
+                    {error && <View style={{marginTop: 15}}>
+                        <Text style={{color: "red"}}>{messageError}</Text>
+                    </View>}
+                    <ContainerOAuth
+                        onPressApple={loginWithApple}
+                        onPressFacebook={loginWithFacebook}
+                        onPressGoogle={loginWithGoogle}
                     />
                 </View>
             </View>

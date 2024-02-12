@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import NameAppInput from "./NameAppInput";
 
 
-const CodeInput = ({ code, onCodeChange, onSubmit, loading }) => {
+const CodeInput = ({ onSubmit, loading }) => {
 
     const [smsCode, setSmsCode] = useState(null);
     const [thisCode, setThisCode] = useState(Array(6).fill(''));
@@ -161,7 +161,6 @@ const styles = StyleSheet.create({
 });
 
 CodeInput.propTypes = {
-    onCodeChange: PropTypes.func.isRequired,
     onSubmit: PropTypes.func
 };
 

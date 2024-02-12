@@ -5,6 +5,7 @@ import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import HomeNavigation from "./HomeNavigation";
 import {NameAppColor} from "../styles/MainStyle";
 import Home from "../assets/icons/Home.svg";
+import SecondNavigation from "./SecondNavigation";
 
 const BottomTab = createBottomTabNavigator();
 
@@ -17,6 +18,8 @@ export default function InsideNavigation({ nav, initialRoute, Logger }) {
         if (nav.current) {
             if (tab === 'HomeTab') {
                 nav.current.navigate('Home')
+            } else if (tab === 'SecondTab') {
+                nav.current.navigate('Second')
             }
         }
     }, [tab])
@@ -51,7 +54,7 @@ export default function InsideNavigation({ nav, initialRoute, Logger }) {
                                         marginBottom: 5,
                                         alignSelf: 'center',
                                         fontSize: 11,
-                                        color: focused ? NameAppColor.Purple50 : NameAppColor.Grey20,
+                                        color: focused ? NameAppColor.Purple70 : NameAppColor.Purple20,
                                         fontFamily: 'Satoshi Bold'
                                     }}
                                 >
@@ -60,6 +63,30 @@ export default function InsideNavigation({ nav, initialRoute, Logger }) {
                             )
                         },
                     }}
+
+                />
+                <BottomTab.Screen
+                    name="SecondTab"
+                    initialParams={{initialRoute: initialRoute}}
+                    component={SecondNavigation}
+                    options={{
+                        tabBarLabel: ({focused}) => {
+                            return (
+                                <Text
+                                    style={{
+                                        marginBottom: 5,
+                                        alignSelf: 'center',
+                                        fontSize: 11,
+                                        color: focused ? NameAppColor.Purple70 : NameAppColor.Purple20,
+                                        fontFamily: 'Satoshi Bold'
+                                    }}
+                                >
+                                    Second
+                                </Text>
+                            )
+                        },
+                    }}
+
                 />
             </BottomTab.Navigator>
         </NavigationContainer>

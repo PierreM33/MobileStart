@@ -28,11 +28,6 @@ const NameAppColor = {
     Black: "#000000",
     Red: "#EA635E",
     White: "#FFFFFF",
-
-    //Yellow
-    Yellow100: 'yellow',
-    Yellow50: 'yellow',
-    Yellow10: 'yellow',
 }
 
 const ErrorColor = {
