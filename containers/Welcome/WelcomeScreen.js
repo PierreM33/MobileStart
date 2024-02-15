@@ -10,10 +10,13 @@ const WelcomeScreen = ({ navigation }) => {
         navigation.navigate("Tutorial")
     }
     const onPressLogin = () => {
-        navigation.navigate("Auth")
+        navigation.navigate("Login")
     }
     const onPressCode = () => {
         navigation.navigate("Code")
+    }
+    const onPressRegister = () => {
+        navigation.navigate("Register")
     }
 
     return (
@@ -31,6 +34,13 @@ const WelcomeScreen = ({ navigation }) => {
                 translateActive={false}
                 type={2}
                 onPress={onPressLogin}
+                containerStyle={{marginTop: 20}}
+            />
+            <AppButton
+                title={"Register"}
+                translateActive={false}
+                type={2}
+                onPress={onPressRegister}
                 containerStyle={{marginTop: 20}}
             />
             <AppButton

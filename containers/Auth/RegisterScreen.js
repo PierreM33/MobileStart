@@ -16,65 +16,49 @@ import {loginWithApple, loginWithFacebook, loginWithGoogle} from "../../utilitie
 
 
 
-const LoginScreen = ({ navigation, dispatch }) => {
+const RegisterScreen = ({ navigation, dispatch }) => {
 
     const [error, setError] = useState(false)
-    const [email, setEmail] = useState("test")
-    const [password, setPassword] = useState("test")
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const [secondPassword, setSecondPassword] = useState("")
     const [loading, setLoading] = useState(false)
     const [messageError, setMessageError] = useState(null)
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+
 
     useEffect( () => {
-        setTimeout( () => {
-            setLoading(false)
-            setError(false)
-        }, 2000)
+
     }, [error])
+
+    useEffect( () => {
+        if ((password !== secondPassword) && secondPassword.length > 0) {
+            setError(true)
+            setMessageError("Les mots de passe ne correspondent pas")
+        }
+        setTimeout( () => {
+            if (password === secondPassword) {
+                setError(false)
+            }
+        }, 250)
+    }, [password, secondPassword])
 
     const onPressBack = () => {
         navigation.goBack()
     }
 
-    const onPressLogin = async () => {
-        if (email === "" || password === "") {
-            setError(true)
-        } else {
-            setError(false)
-            setLoading(true)
-            const data = {
-                username: email,
-                password: password
-            }
-            // const resultLogin = await login(setLoading, setMessageError, data, setError) //TEMPORAIREMENT COMMENTE CAR PAS D'API ACTIF
-
-            if (data.password === "test" && data.username === "test") {
-                // if (resultLogin.user && resultLogin.token && resultLogin.refresh_token) {
-                    // REDIRECTION
-                // }
-                setTimeout( () => {
-                    setLoading(false)
-                }, 2000)
-                setTimeout( () => {
-                    const user = {email: email, password: password, token: 'HGDSHJKSH'};
-                    dispatch({type: 'SET_USER', data: user});
-                    dispatch({type: 'SET_TOKEN', data: user.token});
-                    dispatch({type: 'SET_REFRESH_TOKEN', data: user.token});
-                }, 1000)
-
-
-
-            } else {
-                setLoading(false)
-                setError(true)
-                setMessageError("Le mot de passe ou l'adresse email n'est pas valide")
-            }
-        }
+    const onPressRegister = async () => {
 
     }
 
     const disabled = () => {
-        return email === "" || password === "" || loading || error || password.length < 4
+        return email === "" || password === "" || secondPassword !== password || secondPassword === "" || loading || error || password.length < 4 || !/[A-Z]/.test(password);
     }
+
+    const togglePasswordVisibility = () => {
+        setIsPasswordVisible(!isPasswordVisible)
+    }
+
 
     return (
         <KeyboardAvoidingView
@@ -82,11 +66,11 @@ const LoginScreen = ({ navigation, dispatch }) => {
             style={{flex: 1}}
         >
 
-            <View style={{backgroundColor: "white", flex: 1}}>
-                <View style={{position: "absolute", top: 75, left: 15}}>
+            <View style={{backgroundColor: "white", flex: 1, justifyContent: "center", alignItems: "center"}}>
+                <View style={{position: "absolute", top: 75, left: 15, zIndex: 2}}>
                     <BackButton onPress={onPressBack}/>
                 </View>
-                <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+                <View style={{backgroundColor: "orange"}}>
                     <AppInput
                         placeholder={"Email"}
                         containerStyle={{marginTop: 8}}
@@ -100,12 +84,25 @@ const LoginScreen = ({ navigation, dispatch }) => {
                         text={password}
                         setText={setPassword}
                         error={error}
+                        viewPassword={true}
+                        isPasswordVisible={isPasswordVisible}
+                        togglePasswordVisibility={togglePasswordVisibility}
+                    />
+                    <AppInput
+                        placeholder={"Répétez le mot de passe"}
+                        containerStyle={{marginTop: 8}}
+                        text={secondPassword}
+                        setText={setSecondPassword}
+                        error={error}
+                        viewPassword={true}
+                        isPasswordVisible={isPasswordVisible}
+                        togglePasswordVisibility={togglePasswordVisibility}
                     />
                     <AppButton
-                        title={"Connexion"}
+                        title={"S'inscrire"}
                         translateActive={false}
                         type={2}
-                        onPress={onPressLogin}
+                        onPress={onPressRegister}
                         containerStyle={{marginTop: 20}}
                         disabled={disabled()}
                         loading={loading}
@@ -113,11 +110,6 @@ const LoginScreen = ({ navigation, dispatch }) => {
                     {error && <View style={{marginTop: 15}}>
                         <Text style={{color: "red"}}>{messageError}</Text>
                     </View>}
-                    {/*<ContainerOAuth*/}
-                    {/*    onPressApple={loginWithApple}*/}
-                    {/*    onPressFacebook={loginWithFacebook}*/}
-                    {/*    onPressGoogle={loginWithGoogle}*/}
-                    {/*/>*/}
                 </View>
             </View>
         </KeyboardAvoidingView>
@@ -132,6 +124,6 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(LoginScreen);
+export default connect(null, mapDispatchToProps)(RegisterScreen);
 
 

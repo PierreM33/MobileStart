@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import {MainStyle, NameAppColor} from "../../styles/MainStyle";
-import EyeClose from "../../assets/icons/EyeClose.svg";
 import Eye from "../../assets/icons/Eye.svg";
+import EyeClose from "../../assets/icons/EyeClose.svg";
 
 const AppInput = ({ placeholder, setText, text, label = null, containerStyle = {}, textStyle = {}, inputProps = {}, onSubmitEditing, messageError, error, togglePasswordVisibility, viewPassword = false, isPasswordVisible}) => {
 
@@ -28,11 +28,11 @@ const AppInput = ({ placeholder, setText, text, label = null, containerStyle = {
                     value={text}
                     onSubmitEditing={onSubmitEditing}
                 />
-                {/*{viewPassword &&*/}
-                {/*    <TouchableOpacity style={{right: 5, position: 'absolute', width: 40, height: 40, alignItems: "center", justifyContent: "center"}} onPress={togglePasswordVisibility}>*/}
-                {/*        {!isPasswordVisible && <Eye width={20} height={20} stroke={thisError}/>}*/}
-                {/*        {isPasswordVisible && <EyeClose width={20} height={20} stroke={thisError}/>}*/}
-                {/*    </TouchableOpacity>}*/}
+                {viewPassword &&
+                    <TouchableOpacity style={{right: 5, position: 'absolute', width: 40, height: 40, alignItems: "center", justifyContent: "center"}} onPress={togglePasswordVisibility}>
+                        {!isPasswordVisible && <Eye width={20} height={20} stroke={thisError}/>}
+                        {isPasswordVisible && <EyeClose width={20} height={20} stroke={thisError}/>}
+                    </TouchableOpacity>}
             </View>
             {messageError &&
                 <Text style={{alignSelf: "center", color: "red", width: "90%", fontSize: 12, opacity: error ? 1:0}}>
