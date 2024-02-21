@@ -13,7 +13,7 @@ const NameAppInput = ({ value, onTextChange, style = {}, loading, disabled, inpu
             <View style={{flexDirection: 'row'}}>
                 <TextInput
                     {...inputProps}
-                    selectionColor={NameAppColor.Purple10}
+                    selectionColor={NameAppColor.Orange10}
                     style={{
                         ...MainStyle.H3,
                         ...styles.input,
@@ -34,7 +34,7 @@ const NameAppInput = ({ value, onTextChange, style = {}, loading, disabled, inpu
             </View>
             <View
                 style={[{
-                    ...styles.line, backgroundColor: focused ? NameAppColor.Purple50 : NameAppColor.Grey30
+                    ...styles.line, backgroundColor: focused ? NameAppColor.Orange10 : NameAppColor.Orange50
                 }, focused ? styles.shadowLine : {}]}
             />
             {errorMessage &&

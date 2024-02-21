@@ -42,7 +42,7 @@ const CodeScreen = ({ navigation, dispatch }) => {
             {code && code.length === 6 &&
                 <View style={{alignItems: "center", marginTop: 25}}><Text>Votre code = {code}</Text></View>}
             <TouchableOpacity style={{alignItems: "center", marginTop: 25}} onPress={resendCode}>
-                <Text style={{color: NameAppColor.Purple50, textDecorationLine: 'underline', fontSize: 16}}>Renvoyer le code</Text>
+                <Text style={{color: NameAppColor.Orange10, textDecorationLine: 'underline', fontSize: 16}}>Renvoyer le code</Text>
             </TouchableOpacity>
         </View>
     )

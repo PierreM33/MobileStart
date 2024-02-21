@@ -4,7 +4,7 @@ import { useFonts } from 'expo-font';
 import {Text, StatusBar, TouchableOpacity, View} from "react-native";
 import AuthNavigation from "./navigation/AuthNavigation";
 import HomeNavigation from "./navigation/HomeNavigation";
-import InsideNavigation from "./navigation/InsideNavigation";
+import BottomNavigation from "./navigation/BottomNavigation";
 
 
 function NameApp(props) {
@@ -49,7 +49,7 @@ function NameApp(props) {
             <View style={{flex: 1}}>
                 <StatusBar barStyle={"dark-content"} translucent={true} backgroundColor={"transparent"}/>
                 {/*<HomeNavigation initialRoute='Home' nav={navNameApp} Logger={props.Logger.user}/>*/}
-                <InsideNavigation initialRoute='Home' nav={navNameApp} Logger={props.Logger.user}/>
+                <BottomNavigation initialRoute='Home' nav={navNameApp} Logger={props.Logger.user}/>
             </View>
         )
     }

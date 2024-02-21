@@ -2,7 +2,6 @@ import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NavigationContainer} from '@react-navigation/native';
 import WelcomeScreen from "../containers/Welcome/WelcomeScreen";
-import DiscoverScreen from "../containers/Welcome/DiscoverScreen";
 import LoginScreen from "../containers/Auth/LoginScreen";
 import CodeScreen from "../containers/Auth/CodeScreen";
 import RegisterScreen from "../containers/Auth/RegisterScreen";
@@ -39,13 +38,6 @@ export default function AuthNavigation({ initialRoute, nav }) {
                 <Stack.Screen
                     name="Register"
                     component={RegisterScreen}
-                    options={{
-                        headerShown: false
-                    }}
-                />
-                <Stack.Screen
-                    name="Tutorial"
-                    component={DiscoverScreen}
                     options={{
                         headerShown: false
                     }}

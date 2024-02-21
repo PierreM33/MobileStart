@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
-import {MainStyle, NameAppColor} from "../../styles/MainStyle";
+import {ErrorColor, MainStyle, NameAppColor} from "../../styles/MainStyle";
 import Eye from "../../assets/icons/Eye.svg";
 import EyeClose from "../../assets/icons/EyeClose.svg";
 
@@ -10,7 +10,18 @@ const AppInput = ({ placeholder, setText, text, label = null, containerStyle = {
         setText(text)
     }
 
-    const thisError = !error ? NameAppColor.Black : NameAppColor.Red
+    const temporaireOrange = () => {
+        return (
+            <View style={{backgroundColor: "orange", width :15, height: 15, borderRadius: 100}}/>
+        )
+    }
+    const temporaireGreen = () => {
+        return (
+            <View style={{backgroundColor: "green", width :15, height: 15, borderRadius: 100}}/>
+        )
+    }
+
+    const thisError = !error ? NameAppColor.Black : ErrorColor.Error1
 
     return (
         <View style={{alignSelf: 'center', ...containerStyle}}>
@@ -22,7 +33,6 @@ const AppInput = ({ placeholder, setText, text, label = null, containerStyle = {
                     placeholder={placeholder ? placeholder : ""}
                     placeholderTextColor={NameAppColor.Grey50}
                     style={{...textStyle, ...MainStyle.H5, width: "90%"}}
-                    color={thisError}
                     autoCapitalize={"none"}
                     onChangeText={(text) => onChange(text)}
                     value={text}
@@ -30,8 +40,10 @@ const AppInput = ({ placeholder, setText, text, label = null, containerStyle = {
                 />
                 {viewPassword &&
                     <TouchableOpacity style={{right: 5, position: 'absolute', width: 40, height: 40, alignItems: "center", justifyContent: "center"}} onPress={togglePasswordVisibility}>
-                        {!isPasswordVisible && <Eye width={20} height={20} stroke={thisError}/>}
-                        {isPasswordVisible && <EyeClose width={20} height={20} stroke={thisError}/>}
+                        {/*{!isPasswordVisible && <Eye width={20} height={20} stroke={thisError}/>}*/}
+                        {/*{isPasswordVisible && <EyeClose width={20} height={20} stroke={thisError}/>}*/}
+                        {!isPasswordVisible && temporaireOrange()}
+                        {isPasswordVisible && temporaireGreen()}
                     </TouchableOpacity>}
             </View>
             {messageError &&

@@ -10,7 +10,7 @@ import SecondNavigation from "./SecondNavigation";
 const BottomTab = createBottomTabNavigator();
 
 
-export default function InsideNavigation({ nav, initialRoute, Logger }) {
+export default function BottomNavigation({ nav, initialRoute, Logger }) {
 
     const [tab, setTab] = useState("HomeTab");
 
@@ -32,8 +32,8 @@ export default function InsideNavigation({ nav, initialRoute, Logger }) {
                 screenOptions={{
                     headerShown: false,
                     //unmountOnBlur: true,
-                    tabBarActiveTintColor: NameAppColor.Purple50,
-                    tabBarInactiveTintColor: NameAppColor.Purple50,
+                    tabBarActiveTintColor: NameAppColor.Orange10,
+                    tabBarInactiveTintColor: NameAppColor.Orange10,
                 }}
                 screenListeners={{
                     focus: (route) => {
@@ -54,7 +54,7 @@ export default function InsideNavigation({ nav, initialRoute, Logger }) {
                                         marginBottom: 5,
                                         alignSelf: 'center',
                                         fontSize: 11,
-                                        color: focused ? NameAppColor.Purple70 : NameAppColor.Purple20,
+                                        color: focused ? NameAppColor.Orange50 : NameAppColor.Orange10,
                                         fontFamily: 'Satoshi Bold'
                                     }}
                                 >
@@ -77,11 +77,11 @@ export default function InsideNavigation({ nav, initialRoute, Logger }) {
                                         marginBottom: 5,
                                         alignSelf: 'center',
                                         fontSize: 11,
-                                        color: focused ? NameAppColor.Purple70 : NameAppColor.Purple20,
+                                        color: focused ? NameAppColor.Orange50 : NameAppColor.Orange10,
                                         fontFamily: 'Satoshi Bold'
                                     }}
                                 >
-                                    Second
+                                    Disconnet
                                 </Text>
                             )
                         },

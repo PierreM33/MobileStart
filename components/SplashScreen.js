@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
         height: '100%',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: NameAppColor.Grey10
+        backgroundColor: NameAppColor.White
     }
 });
 

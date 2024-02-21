@@ -1,19 +1,19 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
     View,
-    KeyboardAvoidingView, Platform, Text
+    KeyboardAvoidingView, Platform, Text, StatusBar, ScrollView, Dimensions, Keyboard, TouchableOpacity
 } from 'react-native';
 
 import {connect} from "react-redux";
-import BackButton from "../../components/Buttons/BackButton";
+import {MainStyle, NameAppColor} from "../../styles/MainStyle";
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+import {LoginAndRegisterStyle} from "../../styles/Login/LoginAndRegisterStyle";
+import * as Animatable from 'react-native-animatable';
+import {translate} from "../../utilities/translation";
 import AppInput from "../../components/Buttons/AppInput";
 import AppButton from "../../components/Buttons/AppButton";
-import AxiosInstance from "../../api/AxiosInstance";
-import {login} from "../../api/Login";
-import {setAllAuthData} from "../../redux/actions/authActions";
-import ContainerOAuth from "../../components/Authentication/ContainerOAuth";
-import {loginWithApple, loginWithFacebook, loginWithGoogle} from "../../utilities/loginGAF";
-
+import BackButton from "../../components/Buttons/BackButton";
+import NameAppScrollView from "../../components/NameAppScrollView";
 
 
 const RegisterScreen = ({ navigation, dispatch }) => {
@@ -25,6 +25,7 @@ const RegisterScreen = ({ navigation, dispatch }) => {
     const [loading, setLoading] = useState(false)
     const [messageError, setMessageError] = useState(null)
     const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+    const [isSecondPasswordVisible, setIsSecondPasswordVisible] = useState(false)
 
 
     useEffect( () => {
@@ -55,22 +56,25 @@ const RegisterScreen = ({ navigation, dispatch }) => {
         return email === "" || password === "" || secondPassword !== password || secondPassword === "" || loading || error || password.length < 4 || !/[A-Z]/.test(password);
     }
 
-    const togglePasswordVisibility = () => {
-        setIsPasswordVisible(!isPasswordVisible)
+    const togglePasswordVisibility = (state) => {
+        if ("first" === state) {
+            setIsPasswordVisible(!isPasswordVisible)
+        } else {
+            setIsSecondPasswordVisible(!isSecondPasswordVisible)
+        }
     }
 
-
     return (
-        <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={{flex: 1}}
-        >
-
-            <View style={{backgroundColor: "white", flex: 1, justifyContent: "center", alignItems: "center"}}>
-                <View style={{position: "absolute", top: 75, left: 15, zIndex: 2}}>
+        <NameAppScrollView>
+            <StatusBar barStyle={"dark-content"} animated={true} translucent={true}  backgroundColor={"transparent"}/>
+            <View style={[LoginAndRegisterStyle.inner, {height: Dimensions.get('window').height + (Platform.OS === 'ios' ? 0 : 0)}]} >
+                <View style={{position: "absolute", top: 75, left: 15}}>
                     <BackButton onPress={onPressBack}/>
                 </View>
-                <View style={{backgroundColor: "orange"}}>
+                <View style={LoginAndRegisterStyle.containerInput}>
+                    <View style={{alignSelf: "center"}}>
+                        <Text style={MainStyle.H1}>Inscription</Text>
+                    </View>
                     <AppInput
                         placeholder={"Email"}
                         containerStyle={{marginTop: 8}}
@@ -86,7 +90,10 @@ const RegisterScreen = ({ navigation, dispatch }) => {
                         error={error}
                         viewPassword={true}
                         isPasswordVisible={isPasswordVisible}
-                        togglePasswordVisibility={togglePasswordVisibility}
+                        togglePasswordVisibility={ () => {togglePasswordVisibility("first")}}
+                        inputProps={{
+                            secureTextEntry: !isPasswordVisible
+                        }}
                     />
                     <AppInput
                         placeholder={"Répétez le mot de passe"}
@@ -95,8 +102,11 @@ const RegisterScreen = ({ navigation, dispatch }) => {
                         setText={setSecondPassword}
                         error={error}
                         viewPassword={true}
-                        isPasswordVisible={isPasswordVisible}
-                        togglePasswordVisibility={togglePasswordVisibility}
+                        isPasswordVisible={isSecondPasswordVisible}
+                        togglePasswordVisibility={ () => {togglePasswordVisibility("second")}}
+                        inputProps={{
+                            secureTextEntry: !isSecondPasswordVisible
+                        }}
                     />
                     <AppButton
                         title={"S'inscrire"}
@@ -112,7 +122,7 @@ const RegisterScreen = ({ navigation, dispatch }) => {
                     </View>}
                 </View>
             </View>
-        </KeyboardAvoidingView>
+        </NameAppScrollView>
     )
 
 

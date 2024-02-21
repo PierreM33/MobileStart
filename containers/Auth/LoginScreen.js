@@ -1,18 +1,16 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
     View,
-    KeyboardAvoidingView, Platform, Text
+    KeyboardAvoidingView, Platform, Text, Keyboard, StatusBar, Dimensions, TouchableOpacity
 } from 'react-native';
 
 import {connect} from "react-redux";
 import BackButton from "../../components/Buttons/BackButton";
 import AppInput from "../../components/Buttons/AppInput";
 import AppButton from "../../components/Buttons/AppButton";
-import AxiosInstance from "../../api/AxiosInstance";
-import {login} from "../../api/Login";
-import {setAllAuthData} from "../../redux/actions/authActions";
-import ContainerOAuth from "../../components/Authentication/ContainerOAuth";
-import {loginWithApple, loginWithFacebook, loginWithGoogle} from "../../utilities/loginGAF";
+import {MainStyle, NameAppColor} from "../../styles/MainStyle";
+import {LoginAndRegisterStyle} from "../../styles/Login/LoginAndRegisterStyle";
+import NameAppScrollView from "../../components/NameAppScrollView";
 
 
 
@@ -23,6 +21,7 @@ const LoginScreen = ({ navigation, dispatch }) => {
     const [password, setPassword] = useState("test")
     const [loading, setLoading] = useState(false)
     const [messageError, setMessageError] = useState(null)
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false)
 
     useEffect( () => {
         setTimeout( () => {
@@ -76,17 +75,25 @@ const LoginScreen = ({ navigation, dispatch }) => {
         return email === "" || password === "" || loading || error || password.length < 4
     }
 
-    return (
-        <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={{flex: 1}}
-        >
+    const onPressCode = () => {
+        navigation.navigate("Code")
+    }
 
-            <View style={{backgroundColor: "white", flex: 1}}>
+    const onForgotPassword = () => {
+        //
+    }
+
+    return (
+        <NameAppScrollView>
+            <StatusBar barStyle={"dark-content"} animated={true} translucent={true}  backgroundColor={"transparent"}/>
+            <View style={[LoginAndRegisterStyle.inner, {height: Dimensions.get('window').height + (Platform.OS === 'ios' ? 0 : 0)}]} >
                 <View style={{position: "absolute", top: 75, left: 15}}>
                     <BackButton onPress={onPressBack}/>
                 </View>
                 <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+                    <View style={{alignSelf: "center"}}>
+                        <Text style={MainStyle.H1}>Connexion</Text>
+                    </View>
                     <AppInput
                         placeholder={"Email"}
                         containerStyle={{marginTop: 8}}
@@ -100,6 +107,12 @@ const LoginScreen = ({ navigation, dispatch }) => {
                         text={password}
                         setText={setPassword}
                         error={error}
+                        viewPassword={true}
+                        isPasswordVisible={isPasswordVisible}
+                        togglePasswordVisibility={ () => {setIsPasswordVisible(!isPasswordVisible)}}
+                        inputProps={{
+                            secureTextEntry: !isPasswordVisible
+                        }}
                     />
                     <AppButton
                         title={"Connexion"}
@@ -118,9 +131,20 @@ const LoginScreen = ({ navigation, dispatch }) => {
                     {/*    onPressFacebook={loginWithFacebook}*/}
                     {/*    onPressGoogle={loginWithGoogle}*/}
                     {/*/>*/}
+                    <TouchableOpacity style={{alignSelf: "center", marginVertical: 20}} onPress={onForgotPassword} disabled={loading} >
+                        <Text style={MainStyle.H5}>Mot de passe oublié</Text>
+                    </TouchableOpacity>
+                    <AppButton
+                        title={"Sms Code"}
+                        translateActive={false}
+                        type={2}
+                        onPress={onPressCode}
+                        containerStyle={{marginTop: 20}}
+                        disabled={loading}
+                    />
                 </View>
             </View>
-        </KeyboardAvoidingView>
+        </NameAppScrollView>
     )
 
 
