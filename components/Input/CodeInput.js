@@ -1,10 +1,10 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {Platform, StyleSheet, View} from 'react-native';
 import PropTypes from "prop-types";
 import NameAppInput from "./NameAppInput";
+import Clipboard from '@react-native-clipboard/clipboard';
 
-
-const CodeInput = ({ onSubmit, loading }) => {
+const CodeInput = ({ onSubmit, loading, clipboard }) => {
 
     const [smsCode, setSmsCode] = useState(null);
     const [thisCode, setThisCode] = useState(Array(6).fill(''));
@@ -21,43 +21,37 @@ const CodeInput = ({ onSubmit, loading }) => {
         };
     }, []);
 
+    useEffect(() => {
+        if (clipboard) {
+            Clipboard.getString()
+                .then(content => {
+                    if (content.trim() !== '') {
+                        setThisCode(content.trim().split(''));
+                        if (content && content.length === 6) {
+                            setSmsCode(thisCode)
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la récupération du presse-papiers : ', error);
+                })
+        }
+    }, [clipboard]);
 
     useEffect(() => {
-        if (smsCode && smsCode.length === 6) {
-            const codeUpdate = []
-            codeUpdate[0] = smsCode[0]
-            codeUpdate[1] = smsCode[1]
-            codeUpdate[2] = smsCode[2]
-            codeUpdate[3] = smsCode[3]
-            codeUpdate[4] = smsCode[4]
-            codeUpdate[5] = smsCode[5]
-            setThisCode(codeUpdate)
-            const codeJoin = codeUpdate.join('')
-            if (onSubmit) {
-                onSubmit(codeJoin)
-            }
-        }
+        onSubmit(smsCode)
     }, [smsCode])
 
-    const onchange = (value, index) => {
-        const codeUpdate = [...thisCode];
-        setSmsCode(value)
-        if (value.length <= 1) {
-            codeUpdate[index] = value;
-            setThisCode(codeUpdate);
-            const codeJoin = codeUpdate.join('')
-
-            if (codeJoin && codeJoin.length === 6 && onSubmit) {
-                onSubmit(codeJoin)
-            } else if (value) {
-                const nextEmptyIndex = findNextEmptyIndex(codeUpdate, index + 1);
-                if (refs.current && refs.current[nextEmptyIndex]) {
-                    refs.current[nextEmptyIndex].focus();
-                }
-            }
+    const onChange = (value, index) => {
+        const updatedCode = [...thisCode];
+        updatedCode[index] = value;
+        setThisCode(updatedCode);
+        const newCode = updatedCode.join('');
+        setSmsCode(newCode);
+        if (value && index < 5) {
+            refs.current[index + 1].focus();
         }
-    }
-
+    };
 
     const onDelete = (nativeEvent, index) => {
         if (nativeEvent.key === 'Backspace') {
@@ -89,8 +83,6 @@ const CodeInput = ({ onSubmit, loading }) => {
             }
         }
     }
-
-
 
     const findNextEmptyIndex = (code, startIndex) => {
         if (startIndex >= code.length) {
@@ -127,12 +119,12 @@ const CodeInput = ({ onSubmit, loading }) => {
                                 marginLeft: 0,
                                 textAlign: 'center',
                             },
-                            autoFocus: i === 0,
+                            // autoFocus: i === 0,
                             keyboardType: 'numeric',
                             maxLength: getLength(i),
-                            onKeyPress: ({ nativeEvent }) => onDelete(nativeEvent, i)
+                            onKeyPress: ({ nativeEvent }) => onDelete(nativeEvent, i),
                         }}
-                        onTextChange={(value) => onchange(value, i)}
+                        onTextChange={(value) => onChange(value, i)}
                         loading={loading}
                     />
                 );
@@ -143,7 +135,6 @@ const CodeInput = ({ onSubmit, loading }) => {
 
     return (
         <View style={{...styles.container}}>
-
             {inputs}
         </View>
     )
@@ -160,9 +151,6 @@ const styles = StyleSheet.create({
 
 });
 
-CodeInput.propTypes = {
-    onSubmit: PropTypes.func
-};
 
 export default CodeInput;
 

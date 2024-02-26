@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
     View,
-    KeyboardAvoidingView, Platform, Text, TouchableOpacity
+    KeyboardAvoidingView, Platform, Text, TouchableOpacity, Clipboard
 } from 'react-native';
 
 import {connect} from "react-redux";
@@ -15,6 +15,22 @@ import {NameAppColor} from "../../styles/MainStyle";
 const CodeScreen = ({ navigation, dispatch }) => {
 
     const [code, setCode] = useState("")
+    const [countDown, setCountDown] = useState(60)
+    const [resend, setResend] = useState(false)
+    const [clipboard, setClipboard] = useState(false)
+    const [loading, setLoading] = useState(false)
+
+    useEffect( () => {
+        if (countDown && resend) {
+            setTimeout( () => {
+                setCountDown(countDown - 1)
+            }, 1000)
+        }
+    }, [countDown, resend])
+
+    useEffect( () => {
+        disabled()
+    }, [code])
 
     const onPress = () => {
         console.log("Envoyer le code")
@@ -25,25 +41,45 @@ const CodeScreen = ({ navigation, dispatch }) => {
     }
 
     const disabled = () => {
-        return !(code && code.length === 6);
+        const result = code.includes(' ')
+        if (code && code.length === 6 && !result) {
+            return false
+        } else {
+            return true
+        }
     }
+
 
     const resendCode = () => {
         console.log("Resend code")
+        setResend(true)
     }
+
+    const onCopied = async () => {
+        try {
+            await Clipboard.setString("123456");
+            console.log("Texte copié");
+            setClipboard(true)
+        } catch (error) {
+            console.error("Erreur de copie", error);
+        }
+    }
+
 
     return (
         <View style={{backgroundColor: "white", flex: 1, justifyContent: 'center'}}>
             <View style={{position: "absolute", top: 75, left: 15}}>
                 <BackButton onPress={ () => {navigation.goBack()}}/>
             </View>
-            <CodeInput onSubmit={ (state) => {onCodeChange(state)}} />
+            <CodeInput onSubmit={ (state) => {onCodeChange(state)}} clipboard={clipboard} loading={loading} />
             <AppButton title={"Valider"} type={2} translateActive={false} onPress={onPress} disabled={disabled()}/>
             {code && code.length === 6 &&
                 <View style={{alignItems: "center", marginTop: 25}}><Text>Votre code = {code}</Text></View>}
-            <TouchableOpacity style={{alignItems: "center", marginTop: 25}} onPress={resendCode}>
-                <Text style={{color: NameAppColor.Orange10, textDecorationLine: 'underline', fontSize: 16}}>Renvoyer le code</Text>
+            <TouchableOpacity style={{alignItems: "center", marginTop: 25, flexDirection: "row", display: "flex", justifyContent: "center"}} onPress={resendCode}>
+                <Text style={{color: NameAppColor.Black, textDecorationLine: 'underline', fontSize: 16}}>Renvoyer le code</Text>
+                <Text style={{color: NameAppColor.Black, fontSize: 16}}>{resend ? ( " (" + countDown + ")") : ""}</Text>
             </TouchableOpacity>
+            <AppButton title={"Copier le code"} type={2} translateActive={false} onPress={onCopied} disabled={false} containerStyle={{marginTop: 15}}/>
         </View>
     )
 
