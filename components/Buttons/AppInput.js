@@ -6,22 +6,17 @@ import EyeClose from "../../assets/icons/EyeClose.svg";
 
 const AppInput = ({ placeholder, setText, text, label = null, containerStyle = {}, textStyle = {}, inputProps = {}, onSubmitEditing, messageError, error, togglePasswordVisibility, viewPassword = false, isPasswordVisible}) => {
 
+    const thisError = !error ? NameAppColor.Black : ErrorColor.Error1
+
     const onChange = (text) => {
         setText(text)
     }
 
-    const temporaireOrange = () => {
+    const waitingSvg = (state) => {
         return (
-            <View style={{backgroundColor: "orange", width :15, height: 15, borderRadius: 100}}/>
+            <View style={{backgroundColor: state ? "#383838" : "#949494", width :15, height: 15, borderRadius: 100}}/>
         )
     }
-    const temporaireGreen = () => {
-        return (
-            <View style={{backgroundColor: "green", width :15, height: 15, borderRadius: 100}}/>
-        )
-    }
-
-    const thisError = !error ? NameAppColor.Black : ErrorColor.Error1
 
     return (
         <View style={{alignSelf: 'center', ...containerStyle}}>
@@ -42,8 +37,8 @@ const AppInput = ({ placeholder, setText, text, label = null, containerStyle = {
                     <TouchableOpacity style={{right: 5, position: 'absolute', width: 40, height: 40, alignItems: "center", justifyContent: "center"}} onPress={togglePasswordVisibility}>
                         {/*{!isPasswordVisible && <Eye width={20} height={20} stroke={thisError}/>}*/}
                         {/*{isPasswordVisible && <EyeClose width={20} height={20} stroke={thisError}/>}*/}
-                        {!isPasswordVisible && temporaireOrange()}
-                        {isPasswordVisible && temporaireGreen()}
+                        {!isPasswordVisible && waitingSvg(true)}
+                        {isPasswordVisible && waitingSvg(false)}
                     </TouchableOpacity>}
             </View>
             {messageError &&

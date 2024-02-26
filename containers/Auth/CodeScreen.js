@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
     View,
-    KeyboardAvoidingView, Platform, Text, TouchableOpacity, Clipboard
+    KeyboardAvoidingView, Platform, Text, TouchableOpacity, Clipboard, StatusBar, Dimensions
 } from 'react-native';
 
 import {connect} from "react-redux";
@@ -9,6 +9,8 @@ import CodeInput from "../../components/Input/CodeInput";
 import AppButton from "../../components/Buttons/AppButton";
 import BackButton from "../../components/Buttons/BackButton";
 import {NameAppColor} from "../../styles/MainStyle";
+import NameAppScrollView from "../../components/NameAppScrollView";
+import {LoginAndRegisterStyle} from "../../styles/Login/LoginAndRegisterStyle";
 
 
 
@@ -41,12 +43,17 @@ const CodeScreen = ({ navigation, dispatch }) => {
     }
 
     const disabled = () => {
-        const result = code.includes(' ')
-        if (code && code.length === 6 && !result) {
-            return false
+        if (code) {
+            const result = code.includes(' ')
+            if (code.length === 6 && !result) {
+                return false
+            } else {
+                return true
+            }
         } else {
             return true
         }
+
     }
 
 
@@ -67,20 +74,23 @@ const CodeScreen = ({ navigation, dispatch }) => {
 
 
     return (
-        <View style={{backgroundColor: "white", flex: 1, justifyContent: 'center'}}>
-            <View style={{position: "absolute", top: 75, left: 15}}>
-                <BackButton onPress={ () => {navigation.goBack()}}/>
+        <NameAppScrollView>
+            <StatusBar barStyle={"dark-content"} animated={true} translucent={true}  backgroundColor={"transparent"}/>
+            <View style={{height: Dimensions.get('window').height, backgroundColor: "white", flex: 1, justifyContent: 'center'}} >
+                <View style={{position: "absolute", top: 75, left: 15}}>
+                    <BackButton onPress={ () => {navigation.goBack()}}/>
+                </View>
+                <CodeInput onSubmit={ (state) => {onCodeChange(state)}} clipboard={clipboard} loading={loading} />
+                <AppButton title={"Valider"} type={2} translateActive={false} onPress={onPress} disabled={disabled()}/>
+                {code && code.length === 6 &&
+                    <View style={{alignItems: "center", marginTop: 25}}><Text>Votre code = {code}</Text></View>}
+                <TouchableOpacity style={{alignItems: "center", marginTop: 25, flexDirection: "row", display: "flex", justifyContent: "center"}} onPress={resendCode}>
+                    <Text style={{color: NameAppColor.Black, textDecorationLine: 'underline', fontSize: 16}}>Renvoyer le code</Text>
+                    <Text style={{color: NameAppColor.Black, fontSize: 16}}>{resend ? ( " (" + countDown + ")") : ""}</Text>
+                </TouchableOpacity>
+                <AppButton title={"Copier le code"} type={2} translateActive={false} onPress={onCopied} disabled={false} containerStyle={{marginTop: 15}}/>
             </View>
-            <CodeInput onSubmit={ (state) => {onCodeChange(state)}} clipboard={clipboard} loading={loading} />
-            <AppButton title={"Valider"} type={2} translateActive={false} onPress={onPress} disabled={disabled()}/>
-            {code && code.length === 6 &&
-                <View style={{alignItems: "center", marginTop: 25}}><Text>Votre code = {code}</Text></View>}
-            <TouchableOpacity style={{alignItems: "center", marginTop: 25, flexDirection: "row", display: "flex", justifyContent: "center"}} onPress={resendCode}>
-                <Text style={{color: NameAppColor.Black, textDecorationLine: 'underline', fontSize: 16}}>Renvoyer le code</Text>
-                <Text style={{color: NameAppColor.Black, fontSize: 16}}>{resend ? ( " (" + countDown + ")") : ""}</Text>
-            </TouchableOpacity>
-            <AppButton title={"Copier le code"} type={2} translateActive={false} onPress={onCopied} disabled={false} containerStyle={{marginTop: 15}}/>
-        </View>
+        </NameAppScrollView>
     )
 
 
