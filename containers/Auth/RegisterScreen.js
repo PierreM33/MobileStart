@@ -67,7 +67,7 @@ const RegisterScreen = ({ navigation, dispatch }) => {
     return (
         <NameAppScrollView>
             <StatusBar barStyle={"dark-content"} animated={true} translucent={true}  backgroundColor={"transparent"}/>
-            <View style={{height: Dimensions.get('window').height + (Platform.OS === 'ios' ? 0 : 10)}} >
+            <View style={[LoginAndRegisterStyle.inner, {height: Dimensions.get('window').height + (Platform.OS === 'ios' ? 0 : 0)}]} >
                 <View style={{position: "absolute", top: 75, left: 15}}>
                     <BackButton onPress={onPressBack}/>
                 </View>

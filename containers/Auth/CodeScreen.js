@@ -1,7 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
-    View,
-    KeyboardAvoidingView, Platform, Text, TouchableOpacity, Clipboard, StatusBar, Dimensions
+    View,Text, TouchableOpacity, StatusBar, Dimensions
 } from 'react-native';
 
 import {connect} from "react-redux";
@@ -10,11 +9,11 @@ import AppButton from "../../components/Buttons/AppButton";
 import BackButton from "../../components/Buttons/BackButton";
 import {NameAppColor} from "../../styles/MainStyle";
 import NameAppScrollView from "../../components/NameAppScrollView";
-import {LoginAndRegisterStyle} from "../../styles/Login/LoginAndRegisterStyle";
+import Clipboard from '@react-native-clipboard/clipboard';
 
 
 
-const CodeScreen = ({ navigation, dispatch }) => {
+const CodeScreen = ({ navigation }) => {
 
     const [code, setCode] = useState("")
     const [countDown, setCountDown] = useState(60)
@@ -96,12 +95,6 @@ const CodeScreen = ({ navigation, dispatch }) => {
 
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        dispatch: (action) => { dispatch(action) }
-    }
-}
-
-export default connect(null, mapDispatchToProps)(CodeScreen);
+export default connect(null, null)(CodeScreen);
 
 

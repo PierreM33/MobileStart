@@ -4,7 +4,7 @@ import React from "react";
 import { connect } from "react-redux";
 import {MainStyle} from "../../styles/MainStyle";
 
-const HomeScreen = ({ Logger, dispatch }) => {
+const HomeScreen = ({ Logger }) => {
 
     return (
         <View style={{ flex: 1, backgroundColor: "#ffffff", alignItems: "center", justifyContent: "center" }}>

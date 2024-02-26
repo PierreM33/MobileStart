@@ -1,10 +1,10 @@
 import { Text, View } from "react-native";
 import React from "react";
 import { connect } from "react-redux";
-import {MainStyle} from "../../styles/MainStyle";
+import {MainStyle, NameAppColor} from "../../styles/MainStyle";
 import AppButton from "../../components/Buttons/AppButton";
 
-const SecondScreen = ({ Logger, dispatch }) => {
+const SecondScreen = ({ dispatch }) => {
 
     const onPressDisconnect = () => {
         dispatch({ type: 'REMOVE_USER' });
@@ -14,7 +14,7 @@ const SecondScreen = ({ Logger, dispatch }) => {
 
 
     return (
-        <View style={{ flex: 1, backgroundColor: "#ffffff", alignItems: "center", justifyContent: "center" }}>
+        <View style={{ flex: 1, backgroundColor: NameAppColor.White, alignItems: "center", justifyContent: "center" }}>
             <AppButton
                 title={"Déconnexion"}
                 translateActive={false}

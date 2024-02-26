@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { useFonts } from 'expo-font';
 import {Text, StatusBar, TouchableOpacity, View} from "react-native";
 import AuthNavigation from "./navigation/AuthNavigation";
-import HomeNavigation from "./navigation/HomeNavigation";
 import BottomNavigation from "./navigation/BottomNavigation";
 
 
@@ -48,7 +47,6 @@ function NameApp(props) {
         return (
             <View style={{flex: 1}}>
                 <StatusBar barStyle={"dark-content"} translucent={true} backgroundColor={"transparent"}/>
-                {/*<HomeNavigation initialRoute='Home' nav={navNameApp} Logger={props.Logger.user}/>*/}
                 <BottomNavigation initialRoute='Home' nav={navNameApp} Logger={props.Logger.user}/>
             </View>
         )

@@ -6,9 +6,6 @@ import AppButton from "../../components/Buttons/AppButton";
 
 const WelcomeScreen = ({ navigation }) => {
 
-    const onPressDiscover = () => {
-        navigation.navigate("Tutorial")
-    }
     const onPressLogin = () => {
         navigation.navigate("Login")
     }
@@ -18,7 +15,7 @@ const WelcomeScreen = ({ navigation }) => {
 
     return (
         <View style={WelcomeStyle.container}>
-            <Text style={WelcomeStyle.text}>Bienvenue sur le pack de démarrage</Text>
+            <Text style={WelcomeStyle.text}>Bienvenue sur le pack de démarrage de l'application</Text>
             <AppButton
                 title={"Login"}
                 translateActive={false}

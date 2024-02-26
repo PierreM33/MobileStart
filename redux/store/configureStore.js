@@ -3,7 +3,6 @@ import {Logger} from "../reducers/authReducer";
 import {nameAppState} from "../reducers/nameAppReducer";
 import {combineReducers, configureStore} from "@reduxjs/toolkit";
 import {persistReducer, persistStore} from "redux-persist";
-import thunk from 'redux-thunk';
 
 const persistConfig = {
     key: "NameApp",
@@ -19,6 +18,10 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
     reducer: persistedReducer,
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: false
+        }),
 })
 
 export const persistor = persistStore(store);
